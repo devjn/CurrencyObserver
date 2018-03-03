@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Currency Observer</string>
+
+    <string name="title_currency">Currency</string>
+    <string name="title_crypto_currency">Crypto currency</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="percentChangeInHour">1h: %1$s%%</string>
+    <string name="percentChangeIn24Hours">24h: %1$s%%</string>
+    <string name="percentChangeIn7Days">7d: %1$s%%</string>
+</resources>
