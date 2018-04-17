@@ -11,7 +11,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.*
 
 
 /**
@@ -44,12 +49,17 @@ object RestService {
 
         //set cache to the client
         client = OkHttpClient.Builder()
+                .sslSocketFactory(getSSLSocketFactory())
+                .hostnameVerifier { hostname: String, sslSession: SSLSession ->
+                    true
+                }
                 .addInterceptor(provideOfflineCacheInterceptor())
                 .addInterceptor(interceptor)
 //                .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
                 .addNetworkInterceptor(provideCacheInterceptor())
                 .cache(cache)
                 .build()
+
 
         RestService.builder = Retrofit.Builder()
                 .client(client)
@@ -115,6 +125,38 @@ object RestService {
     fun <S> createService(serviceClass: Class<S>): S {
         val retrofit = builder.build()
         return retrofit.create(serviceClass)
+    }
+
+
+    private fun getSSLSocketFactory(): SSLSocketFactory? {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf()
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+                }
+            })
+
+            // Install the all-trusting trust manager
+            val sslContext = SSLContext.getInstance("SSL")
+            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+            // Create an ssl socket factory with our all-trusting manager
+
+            return sslContext.getSocketFactory()
+        } catch (e: KeyManagementException) {
+            return null
+        } catch (e: NoSuchAlgorithmException) {
+            return null
+        }
+
     }
 
 }

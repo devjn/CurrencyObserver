@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.2.31'
-    ext.kotlin_coroutines_version = '0.22.3'
+    ext.kotlin_coroutines_version = '0.22.5'
     ext.retrofitVersion = '2.3.0'
     repositories {
         google()

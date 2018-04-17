@@ -40,20 +40,21 @@ moe {
         testTarget 'Currency Observer-Test'
 
         // Uncomment and change these settings if you are working with a Xcode workspace
-        // workspace 'xcode/Currency Observer.xcworkspace'
-        // mainScheme 'Currency Observer'
-        // testScheme 'Currency Observer-Test'
+        workspace 'xcode/Currency Observer.xcworkspace'
+        mainScheme 'Currency Observer'
+        testScheme 'Currency Observer-Test'
     }
 }
 
 dependencies {
     // Compile with 'jar' files in the project's 'lib' directory
     implementation fileTree(dir: 'lib', include: '*.jar')
+    implementation project(':common')
 
     // Add Kotlin dependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
-    implementation "com.github.devjn:kotlinx-coroutines-moe:0.22.3"
+    implementation "com.github.devjn:kotlinx-coroutines-moe:0.22.5"
 }
 
 sourceSets {

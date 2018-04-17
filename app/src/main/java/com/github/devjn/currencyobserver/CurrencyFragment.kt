@@ -22,7 +22,7 @@ class CurrencyFragment : BaseCurrencyFragment<Pair<String, Double>>() {
         ad(result)
     }
 
-    fun ad(result: CurrencyResponse): Unit {
+    fun ad(result: CurrencyResponse) {
 
         println("CurrencyFragment " + "Result = " + result)
         Log.i("CurrencyFragment", "Result = " + result)

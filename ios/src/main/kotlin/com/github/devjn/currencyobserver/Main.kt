@@ -6,6 +6,8 @@ import apple.uikit.UIApplication
 import apple.uikit.UIWindow
 import apple.uikit.c.UIKit
 import apple.uikit.protocol.UIApplicationDelegate
+import com.github.devjn.currencyobserver.utils.IOSUtils
+import com.github.devjn.currencyobserver.utils.NativeUtils
 import org.moe.natj.general.Pointer
 import org.moe.natj.general.ann.RegisterOnStartup
 import org.moe.natj.objc.ann.Selector
@@ -16,6 +18,7 @@ class Main protected constructor(peer: Pointer) : NSObject(peer), UIApplicationD
     private var window: UIWindow? = null
 
     override fun applicationDidFinishLaunchingWithOptions(application: UIApplication?, launchOptions: NSDictionary<*, *>?): Boolean {
+        NativeUtils.registerResolver(IOSUtils)
         return true
     }
 
