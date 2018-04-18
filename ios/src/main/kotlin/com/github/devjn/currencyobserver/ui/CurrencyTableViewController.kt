@@ -20,6 +20,7 @@ import apple.uikit.UITableViewCell
 import apple.uikit.UITableViewController
 import com.github.devjn.currencyobserver.rest.RestService
 import com.github.devjn.currencyobserver.rest.data.CurrencyResponse
+import com.github.devjn.currencyobserver.ui.CryptocurrencyTableViewController.Companion.CELL_IDENTIFIER
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.moe.UI
 import kotlinx.coroutines.experimental.runBlocking
@@ -55,7 +56,8 @@ class CurrencyTableViewController protected constructor(peer: Pointer) : UITable
         val text = "1 EUR = ${item.second} ${item.first}"
         cell.textLabel().setText(text)
         val url = getImageUrl(item.first)
-        UIImageViewExt.sd_setImageWithURL(cell.imageView(), url)
+        println("CurrencyFragment " + "url = " + url)
+        UIImageViewExt.sd_setImageWithURLPlaceholderImage(cell.imageView(), url,  UIImage.imageNamed("Currency"))
         return cell
     }
 
@@ -98,7 +100,6 @@ class CurrencyTableViewController protected constructor(peer: Pointer) : UITable
         println("CurrencyFragment " + "updateData = " + result)
         data.clear()
         data.addAll(result)
-        this.tableView().reloadData()
         NSOperationQueue.mainQueue().addOperationWithBlock {
             tableView().reloadData()
         }

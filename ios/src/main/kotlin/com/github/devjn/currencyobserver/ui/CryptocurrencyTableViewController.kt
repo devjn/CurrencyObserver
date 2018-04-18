@@ -2,12 +2,22 @@ package com.github.devjn.currencyobserver.ui
 
 
 import apple.NSObject
-import apple.foundation.NSArray
-import apple.foundation.NSBundle
-import apple.foundation.NSCoder
-import apple.foundation.NSMethodSignature
-import apple.foundation.NSSet
+import apple.c.Globals
+import apple.foundation.*
+import apple.protocol.OS_dispatch_queue
+import apple.uikit.UIImage
+import apple.uikit.UITableView
+import apple.uikit.UITableViewCell
 import apple.uikit.UITableViewController
+import apple.uikit.enums.UIViewAutoresizing
+import com.github.devjn.currencyobserver.rest.RestService
+import com.github.devjn.currencyobserver.rest.data.ResponseItem
+import com.github.devjn.currencyobserver.ui.CurrencyTableViewController.Companion.CELL_IDENTIFIER
+import com.github.devjn.currencyobserver.utils.toNSURL
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.moe.UI
+import kotlinx.coroutines.experimental.runBlocking
+import org.moe.bindings.category.UIImageViewExt
 import org.moe.natj.c.ann.FunctionPtr
 import org.moe.natj.general.NatJ
 import org.moe.natj.general.Pointer
@@ -19,6 +29,7 @@ import org.moe.natj.objc.SEL
 import org.moe.natj.objc.ann.ObjCClassName
 import org.moe.natj.objc.ann.Selector
 import org.moe.natj.objc.map.ObjCObjectMapper
+import java.util.ArrayList
 
 
 @Runtime(ObjCRuntime::class)
@@ -43,8 +54,64 @@ class CryptocurrencyTableViewController protected constructor(peer: Pointer) : U
     override external fun initWithStyle(@NInt style: Long): CryptocurrencyTableViewController
 
 
+    private val data = ArrayList<ResponseItem>()
+
+
+    override fun tableViewCellForRowAtIndexPath(tableView: UITableView, indexPath: NSIndexPath): UITableViewCell {
+        val cell = tableView.dequeueReusableCellWithIdentifierForIndexPath(CELL_IDENTIFIER, indexPath) as CryptocurrencyCell
+        val item = data.get(indexPath.item().toInt())
+        val text = item.symbol +item.name + "$" + item.priceUsd.toString()
+        val prices = "in 1 hour" + item.percentChange1h
+
+        cell.titleText()!!.setText(text)
+        cell.priceText()?.setText(prices)
+
+        cell.iconImage()!!.setAutoresizingMask(UIViewAutoresizing.None)
+        cell.iconImage()!!.setClipsToBounds(true)
+
+        UIImageViewExt.sd_setImageWithURLPlaceholderImage(cell.iconImage(), item.getImageUrl().toNSURL(),  UIImage.imageNamed("Cryptocurrency"))
+        return cell
+    }
+
+    override fun tableViewNumberOfRowsInSection(tableView: UITableView?, section: Long): Long {
+        println("CurrencyFragment " + "data.size.toLong() = " + data.size.toLong())
+        return data.size.toLong()
+    }
+
+    override fun numberOfSectionsInTableView(tableView: UITableView?): Long {
+        return 1
+    }
+
+    override fun viewDidLoad() {
+        super.viewDidLoad()
+        println("viewDidLoad")
+        doRequest()
+    }
+
+
+    fun doRequest() = runBlocking {
+        val apiService = RestService.getCryptoCurrencyService()
+        val result = apiService.getCryptocurrency().await()
+        updateData(result)
+    }
+
+    protected fun updateData(result: List<ResponseItem>) {
+        println("CurrencyFragment " + "updateData = " + result)
+        data.clear()
+        data.addAll(result)
+        Globals.dispatch_async(Globals.dispatch_get_main_queue(), {
+            this.tableView().reloadData()
+        })
+//        NSOperationQueue.mainQueue().addOperationWithBlock {
+//            tableView().reloadData()
+//        }
+    }
+
 
     companion object {
+
+        const val CELL_IDENTIFIER = "cryptocurrencyCell"
+
         init {
             NatJ.register()
         }
