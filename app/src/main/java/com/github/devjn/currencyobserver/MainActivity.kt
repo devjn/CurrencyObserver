@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
+                navigate(SettingsFragment())
                 return@OnNavigationItemSelectedListener true
             }
         }
