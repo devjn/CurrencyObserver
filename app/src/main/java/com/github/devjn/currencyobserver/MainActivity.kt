@@ -13,20 +13,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.selectedItemId = R.id.navigation_currency
     }
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_currency -> {
+                supportActionBar?.title = getString(R.string.title_currency)
                 navigate(CurrencyFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_cryptocurrency -> {
+                supportActionBar?.title = getString(R.string.title_crypto_currency)
                 navigate(CryptoCurrencyFragment())
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_settings -> {
+                supportActionBar?.title = getString(R.string.title_settings)
                 navigate(SettingsFragment())
                 return@OnNavigationItemSelectedListener true
             }
@@ -34,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
-    fun navigate(fragment: Fragment) {
+    private fun navigate(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, "MAIN")
                 .commit()
