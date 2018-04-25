@@ -32,14 +32,14 @@
                                                 <constraint firstAttribute="width" constant="64" id="TrZ-y5-ZOq"/>
                                             </constraints>
                                         </imageView>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Lorem ipsum dolor sit er" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hIm-dO-CJa">
-                                            <rect key="frame" x="88" y="0.0" width="192" height="29"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Lorem ipsum dolor sit er" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hIm-dO-CJa">
+                                            <rect key="frame" x="88" y="3" width="192" height="29"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Lorem ipsum dolor sit er elit lamet" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KXA-qD-vs8">
-                                            <rect key="frame" x="88" y="37" width="192" height="27"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Lorem ipsum dolor sit er elit lamet" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KXA-qD-vs8">
+                                            <rect key="frame" x="88" y="34" width="192" height="27"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="27" id="kT5-Sc-tU8"/>
@@ -50,13 +50,13 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailingMargin" secondItem="hIm-dO-CJa" secondAttribute="trailing" constant="24" id="0HK-ew-vxQ"/>
-                                        <constraint firstItem="3QE-6j-DsO" firstAttribute="top" secondItem="hIm-dO-CJa" secondAttribute="top" id="0KX-7z-hfe"/>
-                                        <constraint firstItem="3QE-6j-DsO" firstAttribute="bottom" secondItem="KXA-qD-vs8" secondAttribute="bottom" id="3Ku-DM-kR2"/>
+                                        <constraint firstItem="3QE-6j-DsO" firstAttribute="top" secondItem="hIm-dO-CJa" secondAttribute="top" constant="-3" id="0KX-7z-hfe"/>
+                                        <constraint firstItem="3QE-6j-DsO" firstAttribute="bottom" secondItem="KXA-qD-vs8" secondAttribute="bottom" constant="3" id="3Ku-DM-kR2"/>
                                         <constraint firstItem="hIm-dO-CJa" firstAttribute="leading" secondItem="KXA-qD-vs8" secondAttribute="leading" id="4kC-ss-Wyq"/>
                                         <constraint firstItem="3QE-6j-DsO" firstAttribute="top" secondItem="rV1-FH-Uzm" secondAttribute="top" id="67c-fp-AJF"/>
                                         <constraint firstItem="3QE-6j-DsO" firstAttribute="leading" secondItem="rV1-FH-Uzm" secondAttribute="leadingMargin" id="7Py-lm-KLb"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="3QE-6j-DsO" secondAttribute="bottom" constant="-3" id="E6M-6K-Czf"/>
-                                        <constraint firstItem="KXA-qD-vs8" firstAttribute="top" secondItem="hIm-dO-CJa" secondAttribute="bottom" constant="8" symbolic="YES" id="fbv-oH-04F"/>
+                                        <constraint firstItem="KXA-qD-vs8" firstAttribute="top" secondItem="hIm-dO-CJa" secondAttribute="bottom" constant="2" id="fbv-oH-04F"/>
                                         <constraint firstItem="hIm-dO-CJa" firstAttribute="leading" secondItem="3QE-6j-DsO" secondAttribute="trailing" constant="8" symbolic="YES" id="lNi-aw-yIK"/>
                                         <constraint firstItem="hIm-dO-CJa" firstAttribute="trailing" secondItem="KXA-qD-vs8" secondAttribute="trailing" id="ulc-tR-cRZ"/>
                                     </constraints>

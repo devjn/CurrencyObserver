@@ -26,17 +26,17 @@ class Main protected constructor(peer: Pointer) : NSObject(peer), UIApplicationD
         window = value
     }
 
-    override fun window(): UIWindow? {
-        return window
-    }
+    override fun window(): UIWindow? = window
 
     companion object {
 
-        @JvmStatic fun main(args: Array<String>) {
+        @JvmStatic
+        fun main(args: Array<String>) {
             UIKit.UIApplicationMain(0, null, null, Main::class.java.name)
         }
 
         @Selector("alloc")
-        @JvmStatic external fun alloc(): Main
+        @JvmStatic
+        external fun alloc(): Main
     }
 }

@@ -56,7 +56,7 @@ class CurrencyTableViewController protected constructor(peer: Pointer) : UITable
         val text = "1 EUR = ${item.second} ${item.first}"
         cell.textLabel().setText(text)
         val url = getImageUrl(item.first)
-        println("CurrencyFragment " + "url = " + url)
+//        println("CurrencyFragment " + "url = " + url)
         UIImageViewExt.sd_setImageWithURLPlaceholderImage(cell.imageView(), url,  UIImage.imageNamed("Currency"))
         return cell
     }
@@ -76,7 +76,7 @@ class CurrencyTableViewController protected constructor(peer: Pointer) : UITable
         doRequest()
     }
 
-    private fun getImageUrl(name: String) = NSURL.URLWithString("http://www.xe.com/themes/xe/images/flags/${name.toLowerCase(Locale.US)}.png")
+    private fun getImageUrl(name: String) = NSURL.URLWithString("https://www.xe.com/themes/xe/images/flags/${name.toLowerCase(Locale.US)}.png")
 
     fun doRequest() = runBlocking {
         val apiService = RestService.getCurrencyService()

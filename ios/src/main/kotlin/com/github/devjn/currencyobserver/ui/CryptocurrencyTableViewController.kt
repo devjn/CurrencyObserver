@@ -1,21 +1,18 @@
 package com.github.devjn.currencyobserver.ui
 
 
+import android.icu.util.UniversalTimeScale.toLong
 import apple.NSObject
 import apple.c.Globals
 import apple.foundation.*
-import apple.protocol.OS_dispatch_queue
-import apple.uikit.UIImage
-import apple.uikit.UITableView
-import apple.uikit.UITableViewCell
-import apple.uikit.UITableViewController
+import apple.foundation.c.Foundation
+import apple.uikit.*
+import apple.uikit.c.UIKit
 import apple.uikit.enums.UIViewAutoresizing
 import com.github.devjn.currencyobserver.rest.RestService
 import com.github.devjn.currencyobserver.rest.data.ResponseItem
 import com.github.devjn.currencyobserver.ui.CurrencyTableViewController.Companion.CELL_IDENTIFIER
 import com.github.devjn.currencyobserver.utils.toNSURL
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.moe.UI
 import kotlinx.coroutines.experimental.runBlocking
 import org.moe.bindings.category.UIImageViewExt
 import org.moe.natj.c.ann.FunctionPtr
@@ -29,7 +26,7 @@ import org.moe.natj.objc.SEL
 import org.moe.natj.objc.ann.ObjCClassName
 import org.moe.natj.objc.ann.Selector
 import org.moe.natj.objc.map.ObjCObjectMapper
-import java.util.ArrayList
+import java.util.*
 
 
 @Runtime(ObjCRuntime::class)
@@ -39,19 +36,19 @@ class CryptocurrencyTableViewController protected constructor(peer: Pointer) : U
 
     @Generated
     @Selector("init")
-    override external fun init(): CryptocurrencyTableViewController
+    external override fun init(): CryptocurrencyTableViewController
 
     @Generated
     @Selector("initWithCoder:")
-    override external fun initWithCoder(aDecoder: NSCoder): CryptocurrencyTableViewController
+    external override fun initWithCoder(aDecoder: NSCoder): CryptocurrencyTableViewController
 
     @Generated
     @Selector("initWithNibName:bundle:")
-    override external fun initWithNibNameBundle(nibNameOrNil: String, nibBundleOrNil: NSBundle): CryptocurrencyTableViewController
+    external override fun initWithNibNameBundle(nibNameOrNil: String, nibBundleOrNil: NSBundle): CryptocurrencyTableViewController
 
     @Generated
     @Selector("initWithStyle:")
-    override external fun initWithStyle(@NInt style: Long): CryptocurrencyTableViewController
+    external override fun initWithStyle(@NInt style: Long): CryptocurrencyTableViewController
 
 
     private val data = ArrayList<ResponseItem>()
@@ -60,11 +57,26 @@ class CryptocurrencyTableViewController protected constructor(peer: Pointer) : U
     override fun tableViewCellForRowAtIndexPath(tableView: UITableView, indexPath: NSIndexPath): UITableViewCell {
         val cell = tableView.dequeueReusableCellWithIdentifierForIndexPath(CELL_IDENTIFIER, indexPath) as CryptocurrencyCell
         val item = data.get(indexPath.item().toInt())
-        val text = item.symbol +item.name + "$" + item.priceUsd.toString()
-        val prices = "in 1 hour" + item.percentChange1h
+        val text = "${item.symbol}  ${item.name}   $${item.priceUsd}"
+
+        val arrayText = arrayOf("1h:  " + item.percentChange1h, "%  24h: " + item.percentChange24h, "%  7d:  " + item.percentChange7d + "%");
+        val arrayPrices = arrayOf(item.percentChange1h, item.percentChange24h, item.percentChange7d)
+
+        val prices = arrayText.convertToString() //Arrays.toString(arrayText)
+        println("Prices = " + prices)
+
+        val attributedString = NSMutableAttributedString.alloc().initWithString(prices)
+
+        for(i in 0 until arrayText.size) {
+            var startPoint = if(i == 0) 5L else 8L
+            for(n in 0 until i)
+                startPoint += arrayText[n].length
+            val color = if (arrayPrices[i] > 0) UIColor.greenColor() else UIColor.redColor()
+            attributedString.addAttributeValueRange(UIKit.NSForegroundColorAttributeName(), color, Foundation.NSMakeRange(startPoint, arrayPrices[i].toString().length.toLong() + 1))
+        }
 
         cell.titleText()!!.setText(text)
-        cell.priceText()?.setText(prices)
+        cell.priceText()?.setAttributedText(attributedString)
 
         cell.iconImage()!!.setAutoresizingMask(UIViewAutoresizing.None)
         cell.iconImage()!!.setClipsToBounds(true)
@@ -96,7 +108,7 @@ class CryptocurrencyTableViewController protected constructor(peer: Pointer) : U
     }
 
     protected fun updateData(result: List<ResponseItem>) {
-        println("CurrencyFragment " + "updateData = " + result)
+//        println("CurrencyFragment " + "updateData = " + result)
         data.clear()
         data.addAll(result)
         Globals.dispatch_async(Globals.dispatch_get_main_queue(), {
@@ -107,6 +119,15 @@ class CryptocurrencyTableViewController protected constructor(peer: Pointer) : U
 //        }
     }
 
+    fun  Array<out String>.convertToString() : String {
+        var result = ""
+        for (i in 0 until this.size) {
+            val item = this[i]
+            result += item
+        }
+        return result
+
+    }
 
     companion object {
 
